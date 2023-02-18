@@ -3,19 +3,22 @@ import { Stage, Layer, Rect, Text, Line, Image } from 'react-konva';
 import { BoardContext } from './App';
 
 
+type LineType = {
+  tool: string
+  points: number[]
+}
+
 const Board = () => {
   const [tool, setTool] = React.useState('pen');
-  const [lines, setLines] = React.useState([]);
+  const [lines, setLines] = React.useState<LineType[]>([]);
   const [texts, setTexts] = React.useState([{message: 'fooaaa環境', x: 10, y: 30}]);
   const isDrawing = React.useRef(false);
   const { boardState, setBoardState } = React.useContext(BoardContext);
 
   const handleMouseDown = (e: any) => {
-    // @ts-ignore
     isDrawing.current = true;
     const pos = e.target.getStage().getPointerPosition();
     if (boardState.mode === 'pencil') {
-      // @ts-ignore
       setLines([...lines, { tool, points: [pos.x, pos.y] }]);
     }
     if (boardState.mode === 'text') {
@@ -31,13 +34,11 @@ const Board = () => {
 
       textarea.addEventListener('keydown', function (e) {
         // hide on enter
-        if (e.keyCode === 13) {
+        if (e.key === 'Enter') {
           document.body.removeChild(textarea);
-          // @ts-ignore
           setTexts([...texts, {message: textarea.value, x: pos.x, y: pos.y }]);
         }
       });
-      // @ts-ignore
       setBoardState({mode: 'normal', file: boardState.file})
     }
   };
@@ -53,7 +54,6 @@ const Board = () => {
       const point = stage.getPointerPosition();
       let lastLine = lines[lines.length - 1];
       // add point
-      // @ts-ignore
       lastLine.points = lastLine.points.concat([point.x, point.y]);
 
       // replace last
@@ -76,7 +76,6 @@ const Board = () => {
       >
         <Layer>
           <Image x={80} y={0} image={
-            // @ts-ignore
             boardState.file
           } />
           {texts.map((text: {message: string; x: number; y: number}, i) => (

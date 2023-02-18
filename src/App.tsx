@@ -33,8 +33,8 @@ nav {
 `  
 
 export const BoardContext = createContext({} as {
-  boardState: {}
-  setBoardState: Dispatch<SetStateAction<{ mode: string; file: string; }>>
+  boardState: {mode: string; file: HTMLImageElement}
+  setBoardState: Dispatch<SetStateAction<{ mode: string; file: HTMLImageElement; }>>
 })
 
 const App = () => {
