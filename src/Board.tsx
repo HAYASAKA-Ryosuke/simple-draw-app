@@ -8,34 +8,58 @@ const Board = () => {
   const [lines, setLines] = React.useState([]);
   const [texts, setTexts] = React.useState([{message: 'fooaaa環境', x: 10, y: 30}]);
   const isDrawing = React.useRef(false);
-  const { boardState } = React.useContext(BoardContext);
+  const { boardState, setBoardState } = React.useContext(BoardContext);
 
   const handleMouseDown = (e: any) => {
-    console.log(boardState)
     // @ts-ignore
-    setTexts([{message: String(boardState.file), x: 10, y: 30}])
     isDrawing.current = true;
     const pos = e.target.getStage().getPointerPosition();
-    // @ts-ignore
-    setLines([...lines, { tool, points: [pos.x, pos.y] }]);
+    if (boardState.mode === 'pencil') {
+      // @ts-ignore
+      setLines([...lines, { tool, points: [pos.x, pos.y] }]);
+    }
+    if (boardState.mode === 'text') {
+      // create textarea and style it
+      var textarea = document.createElement('textarea');
+      document.body.appendChild(textarea);
+
+      textarea.value = '';
+      textarea.style.position = 'absolute';
+      textarea.style.top = pos.y + 'px';
+      textarea.style.left = pos.x + 'px';
+      textarea.focus();
+
+      textarea.addEventListener('keydown', function (e) {
+        // hide on enter
+        if (e.keyCode === 13) {
+          document.body.removeChild(textarea);
+          // @ts-ignore
+          setTexts([...texts, {message: textarea.value, x: pos.x, y: pos.y }]);
+        }
+      });
+      // @ts-ignore
+      setBoardState({mode: 'normal', file: boardState.file})
+    }
   };
 
   const handleMouseMove = (e: any) => {
 
-    // マウスを押下してなければreturnする
-    if (!isDrawing.current) {
-      return;
-    }
-    const stage = e.target.getStage();
-    const point = stage.getPointerPosition();
-    let lastLine = lines[lines.length - 1];
-    // add point
-    // @ts-ignore
-    lastLine.points = lastLine.points.concat([point.x, point.y]);
+    if (boardState.mode === 'pencil') {
+      // マウスを押下してなければreturnする
+      if (!isDrawing.current) {
+        return;
+      }
+      const stage = e.target.getStage();
+      const point = stage.getPointerPosition();
+      let lastLine = lines[lines.length - 1];
+      // add point
+      // @ts-ignore
+      lastLine.points = lastLine.points.concat([point.x, point.y]);
 
-    // replace last
-    lines.splice(lines.length - 1, 1, lastLine);
-    setLines(lines.concat());
+      // replace last
+      lines.splice(lines.length - 1, 1, lastLine);
+      setLines(lines.concat());
+    }
   };
 
   const handleMouseUp = () => {
@@ -51,12 +75,12 @@ const Board = () => {
         onMouseup={handleMouseUp}
       >
         <Layer>
-          <Image x={80} y={90} image={
+          <Image x={80} y={0} image={
             // @ts-ignore
             boardState.file
           } />
           {texts.map((text: {message: string; x: number; y: number}, i) => (
-            <Text key={i} text={text.message} x={text.x} y={text.y}></Text>
+            <Text key={i} draggable={true} text={text.message} x={text.x} y={text.y}></Text>
           ))}
           {lines.map((line: {points: number[]; tool: string}, i) => (
             <Line
