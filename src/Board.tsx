@@ -81,9 +81,7 @@ const Board = () => {
         onMouseup={handleMouseUp}
       >
         <Layer>
-          <Image x={80} y={0} image={
-            boardState.file
-          } />
+          <Image image={boardState.file} />
           {texts.map((text: {message: string; x: number; y: number}, i) => (
             <Text key={i} draggable={true} text={text.message} x={text.x} y={text.y}></Text>
           ))}
