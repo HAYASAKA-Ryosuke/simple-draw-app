@@ -8,10 +8,16 @@ type LineType = {
   points: number[]
 }
 
+type TextType = {
+  message: string
+  x: number
+  y: number
+}
+
 const Board = () => {
   const [tool, setTool] = React.useState('pen');
   const [lines, setLines] = React.useState<LineType[]>([]);
-  const [texts, setTexts] = React.useState([{message: 'fooaaa環境', x: 10, y: 30}]);
+  const [texts, setTexts] = React.useState<TextType[]>([]);
   const isDrawing = React.useRef(false);
   const { boardState, setBoardState } = React.useContext(BoardContext);
 
