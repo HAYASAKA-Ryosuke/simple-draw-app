@@ -1,3 +1,5 @@
+import { save } from '@tauri-apps/api/dialog';
+import { writeBinaryFile } from '@tauri-apps/api/fs';
 import React from 'react';
 import { Stage, Layer, Rect, Text, Line, Image } from 'react-konva';
 import { BoardContext } from './App';
@@ -20,6 +22,30 @@ const Board = () => {
   const [texts, setTexts] = React.useState<TextType[]>([]);
   const isDrawing = React.useRef(false);
   const { boardState, setBoardState } = React.useContext(BoardContext);
+  const stageRef = React.useRef(null);
+
+  const saveFileDialog = async () => {
+    const filePath = await save({
+      filters: [{
+        name: 'Image',
+        extensions: ['png', 'jpeg']
+      }]
+    });
+    // @ts-ignore
+    const image: Blob = await stageRef.current.toBlob()
+    await writeBinaryFile(filePath as string, await image.arrayBuffer());
+    setBoardState(prevState => ({ ...prevState, mode: 'normal' }))
+  }
+
+  const changeEventBoardState = React.useCallback(() => {
+    if (boardState.mode === 'save') {
+      saveFileDialog()
+    }
+  }, [boardState])
+
+  React.useEffect(() => {
+    changeEventBoardState()
+  }, [changeEventBoardState])
 
   const handleMouseDown = (e: any) => {
     isDrawing.current = true;
@@ -79,6 +105,7 @@ const Board = () => {
         onMouseDown={handleMouseDown}
         onMousemove={handleMouseMove}
         onMouseup={handleMouseUp}
+        ref={stageRef}
       >
         <Layer>
           <Image image={boardState.file} />

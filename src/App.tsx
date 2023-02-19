@@ -91,7 +91,7 @@ const App = () => {
 
   const [ boardState, setBoardState ] = useState({mode: 'pencil', file: new Image()})
 
-  const openDialog = async () => {
+  const openFileDialog = async () => {
     const img = new Image()
     const selectedImageFile = await open({
      multiple: false,
@@ -111,7 +111,7 @@ const App = () => {
 
   const loadImageFile = async () => {
     setBoardState(prevState => ({ ...prevState, mode: 'load' }))
-    openDialog()
+    openFileDialog()
   }
 
   const setPencil = () => {
