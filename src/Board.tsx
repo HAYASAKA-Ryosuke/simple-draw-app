@@ -1,5 +1,6 @@
 import { save } from '@tauri-apps/api/dialog';
 import { writeBinaryFile } from '@tauri-apps/api/fs';
+import { appWindow } from '@tauri-apps/api/window'
 import React from 'react';
 import { Stage, Layer, Rect, Text, Line, Image } from 'react-konva';
 import { BoardContext } from './App';
@@ -23,6 +24,13 @@ const Board = () => {
   const isDrawing = React.useRef(false);
   const { boardState, setBoardState } = React.useContext(BoardContext);
   const stageRef = React.useRef(null);
+  const [width, setWidth] = React.useState(window.innerWidth)
+  const [height, setHeight] = React.useState(window.innerHeight)
+
+  appWindow.onResized(({ payload: size }) => {
+    setWidth(size.width);
+    setHeight(size.height);
+  });
 
   const saveFileDialog = async () => {
     const filePath = await save({
@@ -100,8 +108,8 @@ const Board = () => {
   return (
     <>
       <Stage
-        width={window.innerWidth}
-        height={window.innerHeight}
+        width={width}
+        height={height}
         onMouseDown={handleMouseDown}
         onMousemove={handleMouseMove}
         onMouseup={handleMouseUp}
