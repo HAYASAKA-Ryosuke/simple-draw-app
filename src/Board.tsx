@@ -49,6 +49,11 @@ const Board = () => {
     if (boardState.mode === 'save') {
       saveFileDialog()
     }
+    if (boardState.mode === 'erase') {
+      setTool('eraser')
+    }else {
+      setTool('pen')
+    }
   }, [boardState])
 
   React.useEffect(() => {
@@ -85,7 +90,7 @@ const Board = () => {
 
   const handleMouseMove = (e: any) => {
 
-    if (boardState.mode === 'pencil') {
+    if (boardState.mode === 'pencil' || boardState.mode === 'erase') {
       // マウスを押下してなければreturnする
       if (!isDrawing.current) {
         return;
@@ -117,6 +122,8 @@ const Board = () => {
       >
         <Layer>
           <Image image={boardState.file} />
+        </Layer>
+        <Layer>
           {texts.map((text: {message: string; x: number; y: number}, i) => (
             <Text key={i} draggable={true} text={text.message} x={text.x} y={text.y}></Text>
           ))}

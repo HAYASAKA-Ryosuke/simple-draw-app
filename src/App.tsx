@@ -43,6 +43,9 @@ export const ClosedSideBar = styled.header`
 .menu li a.pencil:before {
   content: "☡";
 }
+.menu li a.erase:before {
+  content: "\f12d";
+}
 .menu li a.text:before {
   content: "\f075";
 }
@@ -114,6 +117,10 @@ const App = () => {
     openFileDialog()
   }
 
+  const setErase = () => {
+    setBoardState((prevState) => ({...prevState, mode: 'erase'}))
+  }
+
   const setPencil = () => {
     setBoardState((prevState) => ({...prevState, mode: 'pencil'}))
   }
@@ -132,6 +139,7 @@ const App = () => {
           <ul className="menu">
             <li title="load image"><a onClick={loadImageFile} className={boardState.mode === 'load' ? 'active loadingImage' : 'loadingImage'}>load image</a></li>
             <li title="pencil"><a onClick={setPencil} className={boardState.mode === 'pencil' ? 'active pencil': 'pencil'}>pencil</a></li>
+            <li title="erase"><a onClick={setErase} className={boardState.mode === 'erase' ? 'active erase': 'erase'}>erase</a></li>
             <li title="text"><a onClick={setText} className={boardState.mode === 'text' ? 'active text' : 'text'}>text</a></li>
             <li title="save"><a onClick={saveImageFile} className={boardState.mode === 'save' ? 'active save' : 'save'}>save</a></li>
           </ul>
