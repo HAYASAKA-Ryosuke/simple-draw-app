@@ -26,6 +26,10 @@ const Board = () => {
   const stageRef = React.useRef(null);
   const [width, setWidth] = React.useState(window.innerWidth)
   const [height, setHeight] = React.useState(window.innerHeight)
+  const [strokeWidth, setStrokeWidth] = React.useState(10)
+  const [red, setRed] = React.useState(0)
+  const [green, setGreen] = React.useState(0)
+  const [blue, setBlue] = React.useState(0)
 
   appWindow.onResized(({ payload: size }) => {
     setWidth(size.width);
@@ -66,6 +70,9 @@ const Board = () => {
     if (boardState.mode === 'pencil') {
       setLines([...lines, { tool, points: [pos.x, pos.y] }]);
     }
+    if (boardState.mode === 'erase') {
+      setLines([...lines, { tool, points: [pos.x, pos.y] }]);
+    }
     if (boardState.mode === 'text') {
       // create textarea and style it
       var textarea = document.createElement('textarea');
@@ -84,7 +91,7 @@ const Board = () => {
           setTexts([...texts, {message: textarea.value, x: pos.x, y: pos.y }]);
         }
       });
-      setBoardState({mode: 'normal', file: boardState.file})
+      setBoardState({mode: 'normal', color: 'rgb(255,255,255)', file: boardState.file})
     }
   };
 
@@ -100,7 +107,6 @@ const Board = () => {
       let lastLine = lines[lines.length - 1];
       // add point
       lastLine.points = lastLine.points.concat([point.x, point.y]);
-
       // replace last
       lines.splice(lines.length - 1, 1, lastLine);
       setLines(lines.concat());
@@ -131,8 +137,8 @@ const Board = () => {
             <Line
               key={i}
               points={line.points}
-              stroke="#00000"
-              strokeWidth={5}
+              stroke={`rgb(${red},${green},${blue})`}
+              strokeWidth={strokeWidth}
               tension={0.5}
               lineCap="round"
               lineJoin="round"

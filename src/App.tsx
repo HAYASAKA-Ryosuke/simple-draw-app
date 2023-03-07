@@ -86,13 +86,13 @@ transform: translate(40px)
 `
 
 export const BoardContext = createContext({} as {
-  boardState: {mode: string; file: HTMLImageElement}
-  setBoardState: Dispatch<SetStateAction<{ mode: string; file: HTMLImageElement; }>>
+  boardState: {mode: string; color: string; file: HTMLImageElement}
+  setBoardState: Dispatch<SetStateAction<{ mode: string; color: string; file: HTMLImageElement; }>>
 })
 
 const App = () => {
 
-  const [ boardState, setBoardState ] = useState({mode: 'pencil', file: new Image()})
+  const [ boardState, setBoardState ] = useState({mode: 'pencil', color: 'rgb(255,255,255)', file: new Image()})
 
   const openFileDialog = async () => {
     const img = new Image()
@@ -128,6 +128,11 @@ const App = () => {
   const setText = () => {
     setBoardState((prevState) => ({...prevState, mode: 'text'}))
   }
+
+  const setColor = () => {
+    setBoardState((prevState) => ({...prevState, mode: 'text'}))
+  }
+
   const saveImageFile = () => {
     setBoardState((prevState) => ({...prevState, mode: 'save'}))
   }
@@ -142,6 +147,7 @@ const App = () => {
             <li title="erase"><a onClick={setErase} className={boardState.mode === 'erase' ? 'active erase': 'erase'}>erase</a></li>
             <li title="text"><a onClick={setText} className={boardState.mode === 'text' ? 'active text' : 'text'}>text</a></li>
             <li title="save"><a onClick={saveImageFile} className={boardState.mode === 'save' ? 'active save' : 'save'}>save</a></li>
+            <li title="color"><a onClick={setColor} className={boardState.mode === 'erase' ? 'active erase': 'erase'}>erase</a></li>
           </ul>
         </ClosedSideBar>
         <BoardCss>
