@@ -15,6 +15,9 @@ export const ClosedSideBar = styled.header`
   margin: 0;
   padding: 0;
   background: #4D455D;
+  overflow-y: auto;
+  overflow-x: auto;
+  z-index: 100;
 }
 .menu li a{
   display:block;
@@ -65,18 +68,18 @@ export const ClosedSideBar = styled.header`
 }
 .menu li:after{
     content: attr(title);
-    position:absolute;
+    position: absolute;
     left:3em;
     top:0;
     height:3em;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    text-transform:uppercase;
+    text-transform: uppercase;
     background:#ff5c62;
     padding:2em;
     transition: all 0.3s ease-in-out;
-    visibility:hidden;
+    visibility: hidden;
     opacity:0;
 }
 `  
@@ -144,8 +147,8 @@ const App = () => {
           <ul className="menu">
             <li title="load image"><a onClick={loadImageFile} className={boardState.mode === 'load' ? 'active loadingImage' : 'loadingImage'}>load image</a></li>
             <li title="pencil"><a onClick={setPencil} className={boardState.mode === 'pencil' ? 'active pencil': 'pencil'}>pencil</a></li>
-            <li title="erase"><a onClick={setErase} className={boardState.mode === 'erase' ? 'active erase': 'erase'}>erase</a></li>
             <li title="text"><a onClick={setText} className={boardState.mode === 'text' ? 'active text' : 'text'}>text</a></li>
+            <li title="erase"><a onClick={setErase} className={boardState.mode === 'erase' ? 'active erase': 'erase'}>erase</a></li>
             <li title="save"><a onClick={saveImageFile} className={boardState.mode === 'save' ? 'active save' : 'save'}>save</a></li>
             <li title="color"><a onClick={setColor} className={boardState.mode === 'erase' ? 'active erase': 'erase'}>erase</a></li>
           </ul>
