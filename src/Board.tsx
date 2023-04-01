@@ -119,8 +119,8 @@ const Board = () => {
   return (
     <>
       <Stage
-        width={width}
-        height={height}
+        width={boardState.file.width || width}
+        height={boardState.file.height || height}
         onMouseDown={handleMouseDown}
         onMousemove={handleMouseMove}
         onMouseup={handleMouseUp}
